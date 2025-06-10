@@ -1,0 +1,27 @@
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import AnonymousCodePage from './pages/AnonymousCodePage';
+import AuthPage from './pages/AuthPage';
+import EmailVerifyPage from './pages/EmailVerifyPage';
+import RegisterPage from './pages/RegisterPage';
+
+export function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/reg" element={<RegisterPage />} />
+          <Route path="/auth/email" element={<EmailVerifyPage />} />
+          <Route path="/reg/code" element={<AnonymousCodePage />} />
+          <Route path="*" element={<Navigate to="/auth" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
+}
