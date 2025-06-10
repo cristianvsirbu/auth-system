@@ -9,6 +9,7 @@ import AnonymousCodePage from "./pages/AnonymousCodePage";
 import AuthPage from "./pages/AuthPage";
 import EmailVerifyPage from "./pages/EmailVerifyPage";
 import RegisterPage from "./pages/RegisterPage";
+import DashboardPage from "./pages/DashboardPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
 	const { isAuthenticated, loading } = useAuth();
@@ -31,16 +32,28 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 export function App() {
 	return (
 		<AuthProvider>
-			<main>
-				<Router>
-					<Routes>
-						<Route path="/auth" element={<AuthPage />} />
-						<Route path="/reg" element={<RegisterPage />} />
-						<Route path="/auth/email" element={<EmailVerifyPage />} />
-						<Route path="/reg/code" element={<AnonymousCodePage />} />
-						<Route path="*" element={<Navigate to="/auth" replace />} />
-					</Routes>
-				</Router>
+			<main className="min-h-screen bg-gray-100 flex flex-col">
+				<div className="flex-grow flex items-center justify-center p-4">
+					<div className="w-full max-w-md">
+						<Router>
+							<Routes>
+								<Route path="/auth" element={<AuthPage />} />
+								<Route path="/reg" element={<RegisterPage />} />
+								<Route path="/auth/email" element={<EmailVerifyPage />} />
+								<Route path="/reg/code" element={<AnonymousCodePage />} />
+								<Route
+									path="/dashboard"
+									element={
+										<ProtectedRoute>
+											<DashboardPage />
+										</ProtectedRoute>
+									}
+								/>
+								<Route path="*" element={<Navigate to="/auth" replace />} />
+							</Routes>
+						</Router>
+					</div>
+				</div>
 			</main>
 		</AuthProvider>
 	);
