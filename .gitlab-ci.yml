@@ -1,0 +1,128 @@
+stages:
+- deps
+- validate
+- build
+- verify
+
+variables:
+  DOCKER_AUTH_CONFIG: '{"auths":{"registry.syn.st":{"username":"$CI_REGISTRY_USER","password":"$CI_REGISTRY_PASSWORD"}}}'
+  NODE_VERSION: '20'
+  PLAYWRIGHT_VERSION: v1.52.0-noble
+  DEV_SERVER_PORT: 5173
+
+deps-job:
+  stage: deps
+  image: node:${NODE_VERSION}
+  script:
+  - npm ci
+  artifacts:
+    paths:
+    - node_modules/
+    expire_in: 10 minutes
+
+code-quality-job:
+  stage: validate
+  needs:
+  - deps-job
+  image: node:${NODE_VERSION}
+  script:
+  - npm run validate:ci
+  - cp /tmp/code-quality.json gl-code-quality-report.json
+  artifacts:
+    reports:
+      codequality:
+      - gl-code-quality-report.json
+    expire_in: 1 week
+    when: always
+
+unit-test-job:
+  stage: validate
+  needs:
+  - deps-job
+  image: node:${NODE_VERSION}
+  script:
+  - npm run test:coverage:ci
+  coverage: "/All files(?:[^|]*\\|){4}\\s*(\\S+)/"
+  artifacts:
+    reports:
+      junit:
+      - reports/junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage-reports/cobertura-coverage.xml
+    expire_in: 1 week
+    when: always
+  rules:
+  - if: $SKIP_TESTS == "true"
+    allow_failure: true
+  - allow_failure: false
+
+build-job:
+  stage: build
+  needs:
+  - deps-job
+  - code-quality-job
+  - unit-test-job
+  image: node:${NODE_VERSION}
+  script:
+  - cp .env.example .env
+  - npm run build
+  artifacts:
+    paths:
+    - dist/
+    expire_in: 1 week
+
+e2e-job:
+  stage: verify
+  needs:
+  - build-job
+  - deps-job
+  image: mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}
+  script:
+  - npx serve -s dist -l ${DEV_SERVER_PORT} &
+  - |
+    echo "Waiting for server to be ready..."
+    while ! echo > /dev/tcp/127.0.0.1/${DEV_SERVER_PORT} 2>/dev/null; do
+      sleep 0.5
+    done
+    echo "Server is ready"
+  - npm run e2e
+  artifacts:
+    paths:
+    - e2e-reports/
+    reports:
+      junit:
+      - e2e-reports/results.xml
+    expire_in: 1 week
+    when: always
+  allow_failure: true
+
+lighthouse-job:
+  stage: verify
+  needs:
+  - build-job
+  image: registry.gitlab.com/gitlab-ci-utils/lighthouse:latest
+  script:
+  - npx serve -s dist -l ${DEV_SERVER_PORT} &
+  - |
+    echo "Waiting for server to be ready..."
+    while ! echo > /dev/tcp/127.0.0.1/${DEV_SERVER_PORT} 2>/dev/null; do
+      sleep 0.5
+    done
+    echo "Server is ready"
+  - lhci autorun --collect.settings.chromeFlags="--headless --no-sandbox --disable-dev-shm-usage
+    --disable-gpu"
+  artifacts:
+    paths:
+    - ".lighthouseci/"
+    expire_in: 1 week
+    when: always
+  when: manual
+
+workflow:
+  rules:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    when: always
+  - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+    when: always
+  - when: never

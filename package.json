@@ -1,0 +1,46 @@
+{
+  "name": "app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "preview": "vite preview",
+    "build": "tsc -b && vite build",
+    "lint": "npx @biomejs/biome lint ./src",
+    "lint:fix": "npx @biomejs/biome lint --write ./src",
+    "check": "npx @biomejs/biome check ./",
+    "check:fix": "npx @biomejs/biome check --write ./",
+    "format": "npx @biomejs/biome format ./src",
+    "format:fix": "npx @biomejs/biome format --write ./src",
+    "validate:ci": "npx @biomejs/biome ci --reporter=gitlab --colors=off > /tmp/code-quality.json",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:coverage:ci": "vitest run --coverage --reporter=junit --coverage.reporter=cobertura --coverage.reporter=text --outputFile=reports/junit.xml --coverage.reportsDirectory=coverage-reports",
+    "test:coverage:view": "open coverage-reports/index.html",
+    "e2e": "npx playwright test",
+    "e2e:view": "npx playwright show-report e2e-reports"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@playwright/test": "^1.52.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^22.15.12",
+    "@types/react": "^19.1.3",
+    "@types/react-dom": "^19.1.3",
+    "@vitejs/plugin-react": "^4.4.1",
+    "@vitest/coverage-v8": "^3.1.3",
+    "jsdom": "^26.1.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5",
+    "vite-plugin-biome": "1.0.12",
+    "vitest": "^3.1.3"
+  }
+}

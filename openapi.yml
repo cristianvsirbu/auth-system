@@ -1,0 +1,247 @@
+openapi: 3.0.3
+info:
+  title: Auth API (тестовое)
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local dev server
+paths:
+  /v1/user/register/code:
+    post:
+      summary: Регистрация анонимно (получить login_code)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Тело пустое
+      responses:
+        '200':
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterCodeSuccess'
+
+  /v1/user/register/email:
+    post:
+      summary: Регистрация / авторизация по email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterEmailRequest'
+      responses:
+        '200':
+          description: Код отправлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyData'
+        '422':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
+  /v1/auth/login/email:
+    post:
+      summary: Вход по email + 6-значный PIN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginEmailRequest'
+      responses:
+        '200':
+          description: Успех – выдана сессия
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionSuccess'
+        '401':
+          description: Неверный или просроченный PIN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrongPinError'
+
+  /v1/auth/login/code:
+    post:
+      summary: Вход анонимным login_code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginCodeRequest'
+      responses:
+        '200':
+          description: Успех – выдана сессия
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionSuccess'
+        '401':
+          description: Ошибка аутентификации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+
+  /v1/user/register/google_account:
+    post:
+      summary: Регистрация / авторизация через Google (OAuth)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoogleRequest'
+      responses:
+        '200':
+          description: Успех – выдана сессия
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionSuccess'
+        '401':
+          description: Ошибка аутентификации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+
+components:
+  schemas:
+    # ---------- Requests ----------
+    RegisterEmailRequest:
+      type: object
+      required: [email, lang]
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        lang:
+          type: string
+          example: ru
+
+    LoginEmailRequest:
+      type: object
+      required: [email, pincode]
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        pincode:
+          type: integer
+          example: 123456
+          description: 6-значный код из письма
+
+    LoginCodeRequest:
+      type: object
+      required: [login_code]
+      properties:
+        login_code:
+          type: string
+          minLength: 16
+          maxLength: 16
+          example: '2204178738327676'
+
+    GoogleRequest:
+      type: object
+      required: [code, redirect_uri]
+      properties:
+        code:
+          type: string
+          example: 4/0AbCdEf...
+        redirect_uri:
+          type: string
+          format: uri
+          example: http://localhost:3000/auth/callback/google
+
+    # ---------- Success ----------
+    RegisterCodeSuccess:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            login_code:
+              type: string
+              example: '5486554358112379'
+
+    SessionSuccess:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            session:
+              type: string
+              example: 978fc50daaa25cf0206f678a5843b06d43fc0cab8e565b9a65cf77e3ee448784
+
+    EmptyData:
+      type: object
+      properties:
+        data:
+          type: array
+          items: {}
+          example: []
+
+    # ---------- Errors ----------
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: VALIDATION_ERROR
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                  message:
+                    type: string
+              example:
+                - field: email
+                  message: Email address format is incorrect
+
+    WrongPinError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: WRONG_PIN_CODE
+            message:
+              type: string
+              example: PIN code expired or missing
+
+    AuthError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: AUTHENTICATION_ERROR
+            message:
+              type: string
+              example: Authentication error
