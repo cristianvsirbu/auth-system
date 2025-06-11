@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import {
   Navigate,
   Route,
@@ -11,7 +12,7 @@ import DashboardPage from './pages/DashboardPage';
 import EmailVerifyPage from './pages/EmailVerifyPage';
 import RegisterPage from './pages/RegisterPage';
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+function ProtectedRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {

@@ -86,8 +86,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
           if (errorData.error?.code === 'WRONG_PIN_CODE') {
             throw new Error('Incorrect PIN. For testing, use 123456.');
-          } else {
-            throw new Error(errorData.error?.message || 'Login failed');
           }
         }
 
@@ -105,8 +103,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
           if (errorData.error?.code === 'AUTHENTICATION_ERROR') {
             throw new Error('Invalid access code. Please check and try again.');
-          } else {
-            throw new Error(errorData.error?.message || 'Login failed');
           }
         }
 
