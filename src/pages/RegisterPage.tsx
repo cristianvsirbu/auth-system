@@ -19,7 +19,6 @@ const RegisterPage = () => {
 
     const navigate = useNavigate();
 
-    // Regular expression for email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     const handleEmailRegister = async (e: FormEvent) => {
@@ -47,7 +46,7 @@ const RegisterPage = () => {
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);
-                toast.error(err.message); // Show error message in toast
+                toast.error(err.message); 
             } else {
                 setError("Failed to register with email");
                 toast.error("Registration failed. Please try again later.");
@@ -117,7 +116,6 @@ const RegisterPage = () => {
                     </div>
                 </div>
 
-                {/* Anonymous registration button */}
                 <Button
                     variant="secondary"
                     fullWidth
@@ -127,7 +125,6 @@ const RegisterPage = () => {
                     Anonymous Registration
                 </Button>
 
-                {/* Optional: Google auth button for the quality implementation */}
                 <Button
                     variant="secondary"
                     fullWidth
@@ -137,11 +134,6 @@ const RegisterPage = () => {
                         Continue with Google
                     </span>
                 </Button>
-
-                {/* Display auth errors */}
-                {authError && (
-                    <p className="text-red-500 text-sm text-center">{authError}</p>
-                )}
 
                 {/* Login link */}
                 <div className="text-center">

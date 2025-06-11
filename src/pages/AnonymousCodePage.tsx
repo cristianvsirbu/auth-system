@@ -10,7 +10,6 @@ const AnonymousCodePage = () => {
 	const navigate = useNavigate();
 	const [copied, setCopied] = useState(false);
 
-	// Get code from location state
 	const code = location.state?.code;
 
 	// If no code is present, redirect to registration page
@@ -21,7 +20,6 @@ const AnonymousCodePage = () => {
 		}
 	}, [code, navigate]);
 
-	// Format code for display (add spaces for readability)
 	const formattedCode = code ? code.match(/.{1,4}/g)?.join(" ") : "";
 
 	const handleCopyCode = async () => {
@@ -31,8 +29,6 @@ const AnonymousCodePage = () => {
 			await navigator.clipboard.writeText(code);
 			setCopied(true);
 			toast.success("Code copied to clipboard!");
-
-			// Reset copied state after 3 seconds
 			setTimeout(() => setCopied(false), 3000);
 		} catch (err) {
 			toast.error("Failed to copy code. Please try again or copy manually.");
@@ -46,7 +42,7 @@ const AnonymousCodePage = () => {
 	};
 
 	if (!code) {
-		return null; // Will redirect via useEffect
+		return null;
 	}
 
 	return (

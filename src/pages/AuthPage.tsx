@@ -84,10 +84,6 @@ export default function AuthPage() {
                     {isEmail ? "Continue with Email" : "Login with Access Code"}
                 </Button>
 
-                {authError && (
-                    <p className="text-red-500 text-sm text-center">{authError}</p>
-                )}
-
                 <div className="text-center">
                     <p className="text-sm text-gray-600">
                         Don't have an account?{" "}

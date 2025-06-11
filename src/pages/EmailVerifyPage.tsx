@@ -57,7 +57,7 @@ const EmailVerifyPage = () => {
 		}
 
 		try {
-			await login(email, pincode);
+			await login(email, Number(pincode));
 			toast.success("Verification successful! Redirecting to dashboard...");
 			navigate("/dashboard");
 		} catch (err) {
@@ -135,10 +135,6 @@ const EmailVerifyPage = () => {
 						Verify
 					</Button>
 				</form>
-
-				{authError && (
-					<p className="text-red-500 text-sm text-center">{authError}</p>
-				)}
 
 				<div className="text-center">
 					<p className="text-sm text-gray-600">Didn't receive the code?</p>

@@ -6,11 +6,9 @@ import {
   useState,
 } from 'react';
 import type { AuthContextType, AuthState, User } from '../types/auth';
-  
-  // Create context with null as initial value
+
   const AuthContext = createContext<AuthContextType | null>(null);
   
-  // Hook for consuming the context
   export function useAuth() {
     const context = useContext(AuthContext);
     if (!context) {
@@ -18,8 +16,7 @@ import type { AuthContextType, AuthState, User } from '../types/auth';
     }
     return context;
   }
-  
-  // Provider component that wraps the app
+
   export function AuthProvider({ children }: { children: ReactNode }) {
     const [state, setState] = useState<AuthState>({
       user: null,
@@ -71,55 +68,65 @@ import type { AuthContextType, AuthState, User } from '../types/auth';
     };
   
     // Auth methods that will interact with the API
-    const login = async (emailOrCode: string, pincode?: string) => {
+    const login = async (emailOrCode: string, pincode?: number) => {
       setState(prev => ({ ...prev, loading: true, error: null }));
       
       try {
-        // Determine if input is email or 16-digit code
         const isEmail = emailOrCode.includes("@");
         
-        let response;
         if (isEmail && pincode) {
-          // Email + PIN login
           const response = await fetch("/api/v1/auth/login/email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: emailOrCode, pincode })
           });
-
+    
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || "Login failed");
+            
+            if (errorData.error?.code === "WRONG_PIN_CODE") {
+              throw new Error("Incorrect PIN. For testing, use 123456.");
+            } else {
+              throw new Error(errorData.error?.message || "Login failed");
+            }
           }
-
+    
           const { data } = await response.json();
-          
           saveSession(data.session, { email: emailOrCode });
+          
         } else if (!isEmail && emailOrCode.length === 16) {
-          // Anonymous code login
           const response = await fetch("/api/v1/auth/login/code", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ login_code: emailOrCode })
           });
-
+    
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || "Login failed");
-          }
-
-          const { data } = await response.json();
           
+            if (errorData.error?.code === "AUTHENTICATION_ERROR") {
+              throw new Error("Invalid access code. Please check and try again.");
+            } else {
+              throw new Error(errorData.error?.message || "Login failed");
+            }
+          }
+    
+          const { data } = await response.json();
           saveSession(data.session, { loginCode: emailOrCode });
+          
         } else {
           throw new Error("Invalid input format");
         }
+        
+        setState(prev => ({ ...prev, loading: false }));
+        
       } catch (error) {
         setState(prev => ({ 
           ...prev, 
           loading: false, 
           error: error instanceof Error ? error.message : "Login failed" 
         }));
+        throw error; 
       }
     };
   
@@ -202,8 +209,7 @@ import type { AuthContextType, AuthState, User } from '../types/auth';
     };
   
     const clearError = () => setState(prev => ({ ...prev, error: null }));
-  
-    // Provide the context value
+
     const value: AuthContextType = {
       ...state,
       login,

@@ -8,7 +8,6 @@ const DashboardPage = () => {
 	const { user, isAuthenticated, logout } = useAuth();
 	const navigate = useNavigate();
 
-	// Redirect if not authenticated
 	useEffect(() => {
 		if (!isAuthenticated) {
 			navigate("/auth");

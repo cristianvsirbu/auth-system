@@ -16,7 +16,7 @@ export interface AuthState {
 }
 
 export interface AuthContextType extends AuthState {
-  login: (emailOrCode: string, pincode?: string) => Promise<void>;
+  login: (emailOrCode: string, pincode?: number) => Promise<void>;
   registerWithEmail: (email: string, lang?: string) => Promise<void>;
   registerAnonymously: () => Promise<string>;
   loginWithGoogle: (code: string, redirectUri: string) => Promise<void>;
