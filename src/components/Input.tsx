@@ -1,47 +1,30 @@
-import { type InputHTMLAttributes, forwardRef, useState } from 'react';
+import type { InputHTMLAttributes } from 'react';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
+  label: string;
   error?: string;
-  fullWidth?: boolean;
+  id: string;
 }
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, fullWidth = true, className = '', ...rest }, ref) => {
-    const [isFocused, setIsFocused] = useState(false);
-
-    const baseStyles =
-      'px-3 py-2 border rounded-md shadow-sm focus:outline-none';
-    const stateStyles = error
-      ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-      : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500';
-    const widthStyles = fullWidth ? 'w-full' : '';
-
-    return (
-      <div className={`${widthStyles} ${className}`}>
-        {label && (
-          <label
-            htmlFor={rest.id}
-            className={`block text-sm font-medium ${
-              error ? 'text-red-700' : 'text-gray-700'
-            } ${isFocused ? 'text-blue-600' : ''}`}
-          >
-            {label}
-          </label>
-        )}
-        <div className="mt-1">
-          <input
-            ref={ref}
-            className={`${baseStyles} ${stateStyles} ${widthStyles}`}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            {...rest}
-          />
-        </div>
-      </div>
-    );
-  },
-);
-
-Input.displayName = 'Input';
-export default Input;
+export default function Input({
+  label,
+  id,
+  error,
+  className = '',
+  ...rest
+}: InputProps) {
+  return (
+    <div className="space-y-2">
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+        {label}
+      </label>
+      <input
+        id={id}
+        className={`block w-full px-4 py-3 rounded-lg border ${
+          error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-primary-500 focus:border-primary-500'
+        } shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-opacity-50 ${className}`}
+        {...rest}
+      />
+    </div>
+  );
+}

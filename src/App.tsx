@@ -17,8 +17,8 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        Loading...
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-pulse text-primary-600 font-medium">Loading...</div>
       </div>
     );
   }
@@ -34,9 +34,9 @@ export default function App() {
   return (
     <Router>
       <AuthProvider>
-        <main className="min-h-screen bg-gray-100 flex flex-col">
-          <div className="flex-grow flex items-center justify-center p-4">
-            <div className="w-full max-w-md">
+        <div className="min-h-screen bg-gray-50 flex flex-col w-full">
+          <main className="flex-grow flex items-center justify-center p-4 sm:p-6 md:p-8">
+            <div className="w-full max-w-md mx-auto">
               <Routes>
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/reg" element={<RegisterPage />} />
@@ -53,8 +53,8 @@ export default function App() {
                 <Route path="*" element={<Navigate to="/auth" replace />} />
               </Routes>
             </div>
-          </div>
-        </main>
+          </main>
+        </div>
       </AuthProvider>
     </Router>
   );

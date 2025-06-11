@@ -70,7 +70,7 @@ export default function AuthPage() {
 
   return (
     <Card title="Authentication">
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6 flex flex-col gap-4">
         <Input
           label="Email or Access Code"
           id="auth-input"

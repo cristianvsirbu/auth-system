@@ -104,71 +104,74 @@ export default function EmailVerifyPage() {
   };
 
   return (
-    <Card title="Email Verification">
-      <div className="space-y-6">
-        {!email && (
-          <p className="text-sm text-red-600">
-            No email found. Please return to login.
-          </p>
-        )}
+		<Card title="Email Verification">
+			<div className="space-y-6">
+				{!email && (
+					<p className="text-sm text-red-600">
+						No email found. Please return to login.
+					</p>
+				)}
 
-        {email && (
-          <>
-            <p className="text-sm text-gray-600">
-              Enter the 6-digit PIN sent to <strong>{email}</strong>
-            </p>
+				{email && (
+					<>
+						<p className="text-sm text-gray-600">
+							Enter the 6-digit PIN sent to <strong>{email}</strong>
+						</p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Input
-                label="Verification PIN"
-                id="pin-input"
-                type="text"
-                value={pincode}
-                onChange={(e) =>
-                  setPincode(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))
-                }
-                error={error}
-                placeholder="123456"
-                maxLength={6}
-                pattern="\d{6}"
-                inputMode="numeric"
-                autoFocus
-              />
+						<form
+							onSubmit={handleSubmit}
+							className="space-y-4 flex flex-col gap-4"
+						>
+							<Input
+								label="Verification PIN"
+								id="pin-input"
+								type="text"
+								value={pincode}
+								onChange={(e) =>
+									setPincode(e.target.value.replace(/[^0-9]/g, "").slice(0, 6))
+								}
+								error={error}
+								placeholder="123456"
+								maxLength={6}
+								pattern="\d{6}"
+								inputMode="numeric"
+								autoFocus
+							/>
 
-              <Button type="submit" fullWidth isLoading={loading}>
-                Verify
-              </Button>
-            </form>
-          </>
-        )}
+							<Button type="submit" fullWidth isLoading={loading}>
+								Verify
+							</Button>
+						</form>
+					</>
+				)}
 
-        <div className="text-center">
-          <p className="text-sm text-gray-600">Didn't receive the code?</p>
+				<div className="text-center">
+					<p className="text-sm text-gray-600">Didn't receive the code?</p>
 
-          {countdown > 0 ? (
-            <p className="text-sm text-gray-500">
-              Resend in {countdown} seconds
-            </p>
-          ) : (
-            <button
-              onClick={handleResendPin}
-              disabled={isResending}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-            >
-              {isResending ? 'Sending...' : 'Resend Code'}
-            </button>
-          )}
-        </div>
+					{countdown > 0 ? (
+						<p className="text-sm text-gray-500">
+							Resend in {countdown} seconds
+						</p>
+					) : (
+						<button
+							onClick={handleResendPin}
+							disabled={isResending}
+							className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+						>
+							{isResending ? "Sending..." : "Resend Code"}
+						</button>
+					)}
+				</div>
 
-        <div className="text-center border-t border-gray-200 pt-4">
-          <Link
-            to="/auth"
-            className="text-blue-600 hover:text-blue-800 text-sm"
-          >
-            Back to Login
-          </Link>
-        </div>
-      </div>
-    </Card>
-  );
+				<div className="text-center border-t border-gray-200 pt-4">
+					<Link
+						to="/auth"
+						className="text-blue-600 hover:text-blue-800 text-sm"
+					>
+						Back to Login
+					</Link>
+				</div>
+			</div>
+		</Card>
+	);
 }

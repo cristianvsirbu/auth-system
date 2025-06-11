@@ -100,9 +100,12 @@ export default function RegisterPage() {
 
 	return (
 		<Card title="Create an Account">
-			<div className="space-y-6">
+			<div className="flex flex-col gap-2">
 				{/* Email registration form */}
-				<form onSubmit={handleEmailRegister} className="space-y-4">
+				<form
+					onSubmit={handleEmailRegister}
+					className="flex flex-col gap-4"
+				>
 					<Input
 						label="Email Address"
 						id="email-input"

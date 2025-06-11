@@ -22,7 +22,7 @@
     "e2e:view": "npx playwright show-report e2e-reports"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.9",
+    "@tailwindcss/postcss": "^4.1.9",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hot-toast": "^2.5.2",
