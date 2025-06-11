@@ -69,32 +69,32 @@ export default function AuthPage() {
   };
 
   return (
-    <Card title="Authentication">
-      <form onSubmit={handleSubmit} className="space-y-6 flex flex-col gap-4">
-        <Input
-          label="Email or Access Code"
-          id="auth-input"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          error={error}
-          placeholder={isEmail ? 'email@example.com' : '16-digit access code'}
-          autoComplete="off"
-          autoFocus
-        />
+		<Card title="Authentication">
+			<form onSubmit={handleSubmit} className="space-y-6 flex flex-col gap-4">
+				<Input
+					label="Email or Access Code"
+					id="auth-input"
+					value={input}
+					onChange={(e) => setInput(e.target.value)}
+					error={error}
+					placeholder="Enter email or 16-digit code"
+					autoComplete="off"
+					autoFocus
+				/>
 
-        <Button type="submit" fullWidth isLoading={loading}>
-          {isEmail ? 'Continue with Email' : 'Login with Access Code'}
-        </Button>
+				<Button type="submit" fullWidth isLoading={loading}>
+					{isEmail ? "Continue with Email" : "Login with Access Code"}
+				</Button>
 
-        <div className="text-center">
-          <p className="text-sm text-gray-600">
-            Don't have an account?{' '}
-            <Link to="/reg" className="text-blue-600 hover:text-blue-800">
-              Register
-            </Link>
-          </p>
-        </div>
-      </form>
-    </Card>
-  );
+				<div className="text-center">
+					<p className="text-sm text-gray-600">
+						Don't have an account?{" "}
+						<Link to="/reg" className="text-blue-600 hover:text-blue-800">
+							Register
+						</Link>
+					</p>
+				</div>
+			</form>
+		</Card>
+	);
 }
