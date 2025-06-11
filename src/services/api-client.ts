@@ -16,9 +16,14 @@ export interface ApiError {
 class HttpError extends Error {
   status: number;
   code: string;
-  details?: Array<{field: string; message: string}>;
+  details?: Array<{ field: string; message: string }>;
 
-  constructor(status: number, message: string, code: string, details?: Array<{field: string; message: string}>) {
+  constructor(
+    status: number,
+    message: string,
+    code: string,
+    details?: Array<{ field: string; message: string }>,
+  ) {
     super(message);
     this.status = status;
     this.code = code;
@@ -51,7 +56,7 @@ export async function apiClient<T>(
         response.status,
         error.error?.message || `API error: ${response.status}`,
         error.error?.code || 'UNKNOWN_ERROR',
-        error.error?.details
+        error.error?.details,
       );
     }
 
