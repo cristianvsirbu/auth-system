@@ -170,37 +170,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const loginWithGoogle = async () => {
-		setState((prev) => ({ ...prev, loading: true, error: null }));
+    setState((prev) => ({ ...prev, loading: true, error: null }));
 
-		try {
-			await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-			// Mock successful Google authentication response
-			const mockGoogleUser = {
-				email: "user@gmail.com",
-				name: "Google User",
-				picture: "https://lh3.googleusercontent.com/a/default-user",
-			};
+      // Mock successful Google authentication response
+      const mockGoogleUser = {
+        email: 'user@gmail.com',
+        name: 'Google User',
+        picture: 'https://lh3.googleusercontent.com/a/default-user',
+      };
 
-			saveSession("google-mock-session-token", {
-				email: mockGoogleUser.email,
-				provider: "google",
-				name: mockGoogleUser.name,
-				picture: mockGoogleUser.picture,
-			});
+      saveSession('google-mock-session-token', {
+        email: mockGoogleUser.email,
+        provider: 'google',
+        name: mockGoogleUser.name,
+        picture: mockGoogleUser.picture,
+      });
 
-			setState((prev) => ({ ...prev, loading: false }));
-		} catch (error) {
-			setState((prev) => ({
-				...prev,
-				loading: false,
-				error:
-					error instanceof Error
-						? error.message
-						: "Google authentication failed",
-			}));
-		}
-	};
+      setState((prev) => ({ ...prev, loading: false }));
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        loading: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Google authentication failed',
+      }));
+    }
+  };
 
   const logout = () => {
     localStorage.removeItem('auth_session');

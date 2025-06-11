@@ -18,7 +18,9 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-pulse text-primary-600 font-medium">Loading...</div>
+        <div className="animate-pulse text-primary-600 font-medium">
+          Loading...
+        </div>
       </div>
     );
   }

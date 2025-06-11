@@ -1,6 +1,6 @@
 export interface User {
-	email?: string;
-	provider?: string;
+  email?: string;
+  provider?: string;
   loginCode?: string;
   name?: string;
   picture?: string;
@@ -19,10 +19,10 @@ export interface AuthState {
 }
 
 export interface AuthContextType extends AuthState {
-	login: (emailOrCode: string, pincode?: number) => Promise<void>;
-	registerWithEmail: (email: string, lang?: string) => Promise<void>;
-	registerAnonymously: () => Promise<string>;
-	loginWithGoogle: () => Promise<void>;
-	logout: () => void;
-	clearError: () => void;
+  login: (emailOrCode: string, pincode?: number) => Promise<void>;
+  registerWithEmail: (email: string, lang?: string) => Promise<void>;
+  registerAnonymously: () => Promise<string>;
+  loginWithGoogle: () => Promise<void>;
+  logout: () => void;
+  clearError: () => void;
 }
