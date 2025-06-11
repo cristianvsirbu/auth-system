@@ -6,7 +6,7 @@ interface CardProps {
   footer?: ReactNode;
 }
 
-export function Card({ title, children, footer }: CardProps) {
+export default function Card({ title, children, footer }: CardProps) {
   return (
     <div className="bg-white shadow rounded-lg overflow-hidden">
       {title && (

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button } from '../components/Button';
-import { Card } from '../components/Card';
+import Button from '../components/Button';
+import Card from '../components/Card';
 
-const AnonymousCodePage = () => {
+export default function AnonymousCodePage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
@@ -75,6 +75,4 @@ const AnonymousCodePage = () => {
       </div>
     </Card>
   );
-};
-
-export default AnonymousCodePage;
+}

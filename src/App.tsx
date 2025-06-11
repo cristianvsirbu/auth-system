@@ -30,13 +30,13 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
-export function App() {
+export default function App() {
   return (
-    <AuthProvider>
-      <main className="min-h-screen bg-gray-100 flex flex-col">
-        <div className="flex-grow flex items-center justify-center p-4">
-          <div className="w-full max-w-md">
-            <Router>
+    <Router>
+      <AuthProvider>
+        <main className="min-h-screen bg-gray-100 flex flex-col">
+          <div className="flex-grow flex items-center justify-center p-4">
+            <div className="w-full max-w-md">
               <Routes>
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/reg" element={<RegisterPage />} />
@@ -52,10 +52,10 @@ export function App() {
                 />
                 <Route path="*" element={<Navigate to="/auth" replace />} />
               </Routes>
-            </Router>
+            </div>
           </div>
-        </div>
-      </main>
-    </AuthProvider>
+        </main>
+      </AuthProvider>
+    </Router>
   );
 }

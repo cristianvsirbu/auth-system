@@ -1,12 +1,12 @@
 import { type FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '../components/Button';
-import { Card } from '../components/Card';
-import { Input } from '../components/Input';
+import Button from '../components/Button';
+import Card from '../components/Card';
+import Input from '../components/Input';
 import { useAuth } from '../contexts/AuthContext';
 
-const RegisterPage = () => {
+export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const {
@@ -144,6 +144,4 @@ const RegisterPage = () => {
       </div>
     </Card>
   );
-};
-
-export default RegisterPage;
+}

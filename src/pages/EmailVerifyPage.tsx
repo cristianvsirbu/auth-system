@@ -1,12 +1,12 @@
 import { type FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button } from '../components/Button';
-import { Card } from '../components/Card';
-import { Input } from '../components/Input';
+import Button from '../components/Button';
+import Card from '../components/Card';
+import Input from '../components/Input';
 import { useAuth } from '../contexts/AuthContext';
 
-const EmailVerifyPage = () => {
+export default function EmailVerifyPage() {
   const [pincode, setPincode] = useState('');
   const [error, setError] = useState('');
   const [countdown, setCountdown] = useState(60);
@@ -103,38 +103,44 @@ const EmailVerifyPage = () => {
     }
   };
 
-  if (!email) {
-    return null;
-  }
-
   return (
     <Card title="Email Verification">
       <div className="space-y-6">
-        <p className="text-sm text-gray-600">
-          Enter the 6-digit PIN sent to <strong>{email}</strong>
-        </p>
+        {!email && (
+          <p className="text-sm text-red-600">
+            No email found. Please return to login.
+          </p>
+        )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Verification PIN"
-            id="pin-input"
-            type="text"
-            value={pincode}
-            onChange={(e) =>
-              setPincode(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))
-            }
-            error={error}
-            placeholder="123456"
-            maxLength={6}
-            pattern="\d{6}"
-            inputMode="numeric"
-            autoFocus
-          />
+        {email && (
+          <>
+            <p className="text-sm text-gray-600">
+              Enter the 6-digit PIN sent to <strong>{email}</strong>
+            </p>
 
-          <Button type="submit" fullWidth isLoading={loading}>
-            Verify
-          </Button>
-        </form>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Input
+                label="Verification PIN"
+                id="pin-input"
+                type="text"
+                value={pincode}
+                onChange={(e) =>
+                  setPincode(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))
+                }
+                error={error}
+                placeholder="123456"
+                maxLength={6}
+                pattern="\d{6}"
+                inputMode="numeric"
+                autoFocus
+              />
+
+              <Button type="submit" fullWidth isLoading={loading}>
+                Verify
+              </Button>
+            </form>
+          </>
+        )}
 
         <div className="text-center">
           <p className="text-sm text-gray-600">Didn't receive the code?</p>
@@ -165,6 +171,4 @@ const EmailVerifyPage = () => {
       </div>
     </Card>
   );
-};
-
-export default EmailVerifyPage;
+}

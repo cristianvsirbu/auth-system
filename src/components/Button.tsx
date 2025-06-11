@@ -7,7 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
 }
 
-export function Button({
+export default function Button({
   variant = 'primary',
   fullWidth = false,
   children,
